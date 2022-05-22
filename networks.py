@@ -1,6 +1,8 @@
 import torch
 import torch.nn.functional as F
+from torch.nn.init import sparse_
 from pytorch_lightning import LightningModule, Trainer
+
 
 class VAE(LightningModule):
 
@@ -31,6 +33,30 @@ class VAE(LightningModule):
             torch.nn.Tanh(),
             torch.nn.Linear(1000, 28*28),
         )
+
+        # Iterate and initialize weights for both parts of network following sparse initialization (Martens 2010)
+        with torch.no_grad():
+            for l1, l2 in zip(self._encoder, self._decoder):
+
+                # Skip activation layers
+                if isinstance(l1, torch.nn.Tanh):
+                    continue
+
+                # Set bias to zero
+                l1.bias.data.fill_(0)
+                l2.bias.data.fill_(0)
+
+                # Retrieve weights (take transpose so columns end up being output units)
+                w1 = l1.weight.T
+                w2 = l2.weight.T
+
+                # Compute sparsity so we have D - 15 sparse weights for each column
+                s1 = 1 - 15/w1.shape[0]
+                s2 = 1 - 15/w2.shape[0]
+
+                # Initialize weights with sparse initialization (Martens 2010)
+                l1.weight.data = sparse_(w1, sparsity=s1).T
+                l2.weight.data = sparse_(w2, sparsity=s2).T
 
     def forward(self, X):
         # Vectorize MNIST default format (channel x height x width -> vector)
