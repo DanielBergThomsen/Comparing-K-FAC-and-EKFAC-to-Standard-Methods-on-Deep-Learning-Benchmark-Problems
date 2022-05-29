@@ -2,6 +2,7 @@ import torch
 import torch.nn.functional as F
 from torch.nn.init import sparse_
 from pytorch_lightning import LightningModule, Trainer
+from optimizers.kfac import KFACOptimizer
 
 
 class VAE(LightningModule):
@@ -9,7 +10,10 @@ class VAE(LightningModule):
     def __init__(self, config):
         super().__init__()
 
-        self.optimizer = config['optimizer']
+        self.optimizer_ = config['optimizer']
+        self.is_kfac = 'kfac' in str(self.optimizer_).lower()
+        if self.is_kfac:
+            self.criterion1 = torch.nn.CrossEntropyLoss()
         self.optimizer_params = config['optimizer_params']
 
         # Encoder architecture
@@ -64,10 +68,41 @@ class VAE(LightningModule):
         X = self._encoder(X)
         return self._decoder(X)
 
+    """def optimizer_step(self,
+                       epoch,
+                       batch_idx,
+                       optimizer,
+                       optimizer_idx,
+                       optimizer_closure,
+                       on_tpu=False,
+                       using_native_amp=False,
+                       using_lbfgs=False):
+        # Update params
+        optimizer.step(closure=optimizer_closure)
+
+        # Custom step for KFAC
+        # From https://github.com/alecwangcq/KFAC-Pytorch
+        raise Exception"""
+
     def training_step(self, batch, batch_idx):
         X, y = batch
         X_pred = self(X)
+
+        if self.is_kfac:
+
+            optimizer = self.trainer.optimizers[0]
+            if optimizer.steps % optimizer.TCov == 0:
+                # compute true fisher
+                optimizer.acc_stats = True
+                with torch.no_grad():
+                    sampled_y = torch.multinomial(torch.nn.functional.softmax(X_pred.data, dim=1), 1).squeeze() # Potentially problematic
+                loss_sample = self.criterion1(X_pred, sampled_y)
+                loss_sample.backward(retain_graph=True)
+                optimizer.acc_stats = False
+                optimizer.zero_grad()  # clear the gradient for computing true-fisher.
+
         loss = F.binary_cross_entropy_with_logits(X_pred, X.view(X.size(0), -1), reduction='mean')
+        self.log("train_loss", loss)
         return loss
 
     def validation_step(self, batch, batch_idx):
@@ -77,4 +112,5 @@ class VAE(LightningModule):
         self.log("val_loss", loss)
 
     def configure_optimizers(self):
-        return self.optimizer(self.parameters(), **self.optimizer_params)
+        optimizer_input = self if self.is_kfac else self.parameters()
+        return self.optimizer_(optimizer_input, **self.optimizer_params)

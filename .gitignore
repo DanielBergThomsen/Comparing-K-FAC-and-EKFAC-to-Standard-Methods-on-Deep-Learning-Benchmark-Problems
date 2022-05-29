@@ -131,3 +131,5 @@ dmypy.json
 # Project specifics
 data/
 lightning_logs/
+logs
+.idea
