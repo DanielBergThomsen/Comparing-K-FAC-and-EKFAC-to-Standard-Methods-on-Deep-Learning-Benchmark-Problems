@@ -84,20 +84,24 @@ class KFACOptimizer(optim.Optimizer):
                 print('(%s): %s' % (count, module))
                 count += 1
 
-    def _update_inv(self, m):
+    def _update_inv(self, m,damping=0.001):
         """Do eigen decomposition for computing inverse of the ~ fisher.
         :param m: The layer
         :return: no returns.
         """
-        eps = 1e-10  # for numerical stability
-        self.d_a[m], self.Q_a[m] = torch.symeig(
-            self.m_aa[m], eigenvectors=True)
-        self.d_g[m], self.Q_g[m] = torch.symeig(
-            self.m_gg[m], eigenvectors=True)
+        da = torch.diag(
+            self.m_aa[m].new(self.m_aa[m].shape[0]).fill_(damping),
+            )
+        a = self.m_aa[m] + da
+        self.d_a[m] = torch.inverse(a.to(torch.float32))
+        
+        dg = torch.diag(
+            self.m_gg[m].new(self.m_gg[m].shape[0]).fill_(damping),
+        )
+        g = self.m_gg[m] + dg
+        self.d_g[m] = torch.inverse(g.to(torch.float32))
 
-        self.d_a[m].mul_((self.d_a[m] > eps).float())
-        self.d_g[m].mul_((self.d_g[m] > eps).float())
-
+        
     @staticmethod
     def _get_matrix_form_grad(m, classname):
         """
@@ -112,6 +116,7 @@ class KFACOptimizer(optim.Optimizer):
         if m.bias is not None:
             p_grad_mat = torch.cat([p_grad_mat, m.bias.grad.data.view(-1, 1)], 1)
         return p_grad_mat
+    
 
     def _get_natural_grad(self, m, p_grad_mat, damping):
         """
@@ -119,11 +124,8 @@ class KFACOptimizer(optim.Optimizer):
         :param p_grad_mat: the gradients in matrix form
         :return: a list of gradients w.r.t to the parameters in `m`
         """
-        # p_grad_mat is of output_dim * input_dim
-        # inv((ss')) p_grad_mat inv(aa') = [ Q_g (1/R_g) Q_g^T ] @ p_grad_mat @ [Q_a (1/R_a) Q_a^T]
-        v1 = self.Q_g[m].t() @ p_grad_mat @ self.Q_a[m]
-        v2 = v1 / (self.d_g[m].unsqueeze(1) * self.d_a[m].unsqueeze(0) + damping)
-        v = self.Q_g[m] @ v2 @ self.Q_a[m].t()
+        
+        v = (self.d_g[m] @ p_grad_mat @ self.d_a[m])
         if m.bias is not None:
             # we always put gradient w.r.t weight in [0]
             # and w.r.t bias in [1]
@@ -132,7 +134,6 @@ class KFACOptimizer(optim.Optimizer):
             v[1] = v[1].view(m.bias.grad.data.size())
         else:
             v = [v.view(m.weight.grad.data.size())]
-
         return v
 
     def _kl_clip_and_update_grad(self, updates, lr):
