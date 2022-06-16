@@ -27,7 +27,7 @@ import torch
 import logging
 
 #Change batch size for different experiments: 2000, 4000, and 6000
-BATCH_SIZE = 2000
+BATCH_SIZE = 256
 
 
 '''
@@ -77,10 +77,10 @@ trainer = Trainer(
         max_epochs=MAX_EPOCHS,
         logger=logger
 )
-'''
+
     # Train the model
 trainer.fit(vae, train_loader, val_loader)
-'''
+
 training_logs = []
 
     # Load training logs
