@@ -92,7 +92,7 @@ train_loss = train_df[~train_df.train_loss.isnull()][['train_loss', 'step']]
 train_loss['Optimizer'] = config_name
 training_logs += train_loss.T.to_dict().values()
 training_df = pd.DataFrame(training_logs)
-#training_df['train_loss'] = np.log(training_df['train_loss'] )
+training_df['train_loss'] = np.log(training_df['train_loss'] )
 plt.close()
 
 sns.lineplot(data=training_df, x='step', y='train_loss', hue='Optimizer')
