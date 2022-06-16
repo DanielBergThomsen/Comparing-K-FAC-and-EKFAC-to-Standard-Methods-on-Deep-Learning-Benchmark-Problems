@@ -26,3 +26,19 @@ Finally, run plot_experiment_1.py and plot_experiment_2.py to reproduce our expe
 Here is our suggestion:
   1. to simply reproduce the plots in our report, please run plot_experiment_1.py and plot_experiment_2.py to reproduce our experiments results first.
   2. to reproduce the whole project, please run train_autoencoder.py and train_different_networks.py first, and use plot_experiment_1.py and plot_experiment_2.py to plot.
+
+networks.py: different networks implementation
+data.py: CIFAR-10 dataloader
+autoencoder.py: auto-encoder implementation
+optimizers: two different versions of KFAC, based on alecwangcq's implementation: https://github.com/alecwangcq/KFAC-Pytorch
+
+## Acknowledgement ##
+Our implementation of KFAC with diagonal approximation is based on alecwangcq's implementation, which can be found at https://github.com/alecwangcq/KFAC-Pytorch.
+Also, please consider cite the original paper of KFAC:
+@inproceedings{martens2015optimizing,
+  title={Optimizing neural networks with kronecker-factored approximate curvature},
+  author={Martens, James and Grosse, Roger},
+  booktitle={International conference on machine learning},
+  pages={2408--2417},
+  year={2015}
+}
