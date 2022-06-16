@@ -37,7 +37,7 @@ autoencoder.py: auto-encoder implementation
 optimizers: two different versions of KFAC, based on alecwangcq's implementation: https://github.com/alecwangcq/KFAC-Pytorch
 
 ## Acknowledgement ##
-Our implementation of KFAC with diagonal approximation is based on alecwangcq's implementation, which can be found at https://github.com/alecwangcq/KFAC-Pytorch.
+Our implementation of KFAC with diagonal approximation is based on alecwangcq's implementation, which can be found at https://github.com/alecwangcq/KFAC-Pytorch. It was inspired by gpauloski implementation (https://github.com/gpauloski/kfac-pytorch).
 Also, please consider cite the original paper of KFAC:
 
 @inproceedings{martens2015optimizing,
