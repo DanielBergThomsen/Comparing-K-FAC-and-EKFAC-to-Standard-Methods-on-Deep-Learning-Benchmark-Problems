@@ -1,3 +1,9 @@
+"""
+NOTE: this code has been adapted from https://github.com/alecwangcq/KFAC-Pytorch.
+We have also used parts of the code from https://github.com/gpauloski/kfac-pytorch for float precision and as a second
+reference.
+"""
+
 import math
 import torch
 import torch.optim as optim

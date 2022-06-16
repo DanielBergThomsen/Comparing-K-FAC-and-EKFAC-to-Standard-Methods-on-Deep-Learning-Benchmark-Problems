@@ -1,3 +1,9 @@
+"""
+NOTE: this code has been adapted from https://github.com/alecwangcq/KFAC-Pytorch.
+We have also used parts of the code from https://github.com/gpauloski/kfac-pytorch for float precision and as a second
+reference.
+"""
+
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -177,17 +183,3 @@ class ComputeCovG:
         else:
             cov_g = g.t() @ (g / batch_size)
         return cov_g
-
-
-
-if __name__ == '__main__':
-    def test_ComputeCovA():
-        pass
-
-    def test_ComputeCovG():
-        pass
-
-
-
-
-

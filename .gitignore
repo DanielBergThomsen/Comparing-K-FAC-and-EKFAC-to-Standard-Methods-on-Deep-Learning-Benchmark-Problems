@@ -133,3 +133,4 @@ data/
 lightning_logs/
 # logs
 .idea
+figures/

@@ -8,29 +8,38 @@ and go to plot_experiment_2.py to plot
 '''
 
 import torch
+from torchvision.datasets import CIFAR10
+from torchvision import transforms
 from pytorch_lightning import Trainer
 from pytorch_lightning.loggers import CSVLogger
-from data import read_cifar10
 import logging
 from networks import ResNet
 from optimizers.kfac_eigen import KFACOptimizer as KFACOptimizer_eigen
 from optimizers.kfac_dia import KFACOptimizer as KFACOptimizer_dia
 
-#Choose different networks
+# Choose different networks
 #network_name = 'ResNet18'
 #network_name = 'desnet'
-network_name = 'ResNet18'
+ARCHITECTURE = 'ResNet18'
 
+logging.getLogger("pytorch_lightning").setLevel(logging.WARNING)  # Silences internal Pytorch Lightning warnings
 
-logging.getLogger("pytorch_lightning").setLevel(logging.WARNING)
+# Set up GPU (if available)
 NUM_GPUS = 1 if torch.cuda.is_available() else 0
 DATALOADER_WORKERS = 0 if torch.cuda.is_available() else 6
-MAX_EPOCHS = 100
-BATCH_SIZE=128
+
+
+# Loss function for the ResNets
+loss_fn = nn.CrossEntropyLoss()
+def loss_function(X_pred, X, y):
+    loss_fn(X_pred, y)
+
 
 configs = [
     {
         'label': 'KFAC_dia',
+        'architecture': ARCHITECTURE,
+        'loss_function': loss_function,
         'optimizer': KFACOptimizer_dia,
         'optimizer_params': {'lr': 1e-2,
                              'momentum': 0.9,
@@ -43,6 +52,8 @@ configs = [
     },
     {
         'label': 'KFAC_eigen',
+        'architecture': ARCHITECTURE,
+        'loss_function': loss_function,
         'optimizer': KFACOptimizer_eigen,
         'optimizer_params': {'lr': 1e-2,
                              'momentum': 0.9,
@@ -54,15 +65,30 @@ configs = [
                              'TInv': 100}
     }
 ]
+
+# Dataloader settings
+MAX_EPOCHS = 100
+BATCH_SIZE = 128
+
 # Load dataset
 PATH_DATASETS = 'data/'
-data_loader_train, data_loader_test = read_cifar10(BATCH_SIZE,PATH_DATASETS)
+download = isdir(PATH_DATASETS + 'CIFAR10')
+train_ds = CIFAR10(PATH_DATASETS, train=True, download=download, transform=transforms.ToTensor())
+train_loader = DataLoader(train_ds, batch_size=BATCH_SIZE, num_workers=DATALOADER_WORKERS)
+val_ds = CIFAR10(PATH_DATASETS, train=False, download=download, transform=transforms.ToTensor())
+val_loader = DataLoader(val_ds, batch_size=BATCH_SIZE, num_workers=DATALOADER_WORKERS)
+
 
 for config in configs:
-    config_name = config['label']
-    model = ResNet(config, network_name)
 
-    logger = CSVLogger(save_dir=f'logs/experiment_2/{network_name}/', version="V0", name=config_name)
+    # Config name
+    config_name = config['label']
+
+    # Initialize ResNet with the chosen config
+    model = ResNet(config)
+
+    # Train network
+    logger = CSVLogger(save_dir=f'logs/experiment_2/{ARCHITECTURE}/', version="V0", name=config_name)
     trainer = Trainer(
             enable_model_summary=False,
             gpus=NUM_GPUS,
@@ -70,7 +96,5 @@ for config in configs:
             logger=logger
     )
 
-    trainer.fit(model, data_loader_train, data_loader_test)
-
-
-
+    # Train the model
+    trainer.fit(model, train_loader, val_loader)

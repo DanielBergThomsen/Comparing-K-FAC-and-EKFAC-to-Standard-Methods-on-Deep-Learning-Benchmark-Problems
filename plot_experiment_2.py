@@ -5,17 +5,12 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import logging
 
-#Choose different networks
+# Choose different networks
 #network_name = 'ResNet18'
 #network_name = 'desnet'
 network_name = 'ResNet18'
 
-# Change if training with GPU
-logging.getLogger("pytorch_lightning").setLevel(logging.WARNING)
-NUM_GPUS = 1 if torch.cuda.is_available() else 0
-DATALOADER_WORKERS = 0 if torch.cuda.is_available() else 6
-
-configs =[
+configs = [
     {
         'label': f'KFAC_dia'
     },
@@ -24,8 +19,7 @@ configs =[
     }
 ]
 
-#Plot
-
+# Plot
 for config in configs:
     validation_logs = []
     config_name = config['label']
@@ -34,7 +28,6 @@ for config in configs:
     train_df = pd.read_csv(f'logs/experiment_2/{network_name}/{config_name}/V0/metrics.csv')
 
     # Add validation accuracy
-
     valid_loss = train_df[~train_df.val_loss.isnull()][['val_acc', 'step', 'epoch']]
     valid_loss['Optimizer'] = config_name
     valid_loss= valid_loss[valid_loss['epoch']<100]
@@ -48,4 +41,3 @@ for config in configs:
     sns.lineplot(data=validation_df, x='epoch', y='val_acc', hue='Optimizer')
     plt.show()
     plt.savefig(f'experiment_2_{network_name}_{config_name}.png')
-
