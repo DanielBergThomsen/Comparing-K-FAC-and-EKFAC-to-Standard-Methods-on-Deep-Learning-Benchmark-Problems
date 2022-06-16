@@ -39,10 +39,17 @@ optimizers: two different versions of KFAC, based on alecwangcq's implementation
 ## Acknowledgement ##
 Our implementation of KFAC with diagonal approximation is based on alecwangcq's implementation, which can be found at https://github.com/alecwangcq/KFAC-Pytorch.
 Also, please consider cite the original paper of KFAC:
+
 @inproceedings{martens2015optimizing,
+
   title={Optimizing neural networks with kronecker-factored approximate curvature},
+  
   author={Martens, James and Grosse, Roger},
+  
   booktitle={International conference on machine learning},
+  
   pages={2408--2417},
+  
   year={2015}
+  
 }
