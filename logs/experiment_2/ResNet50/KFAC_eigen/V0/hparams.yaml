@@ -1,0 +1,13 @@
+config:
+  label: KFAC_eigen
+  optimizer: !!python/name:optimizers.kfac.KFACOptimizer ''
+  optimizer_params:
+    TCov: 10
+    TInv: 100
+    damping: 0.001
+    kl_clip: 0.01
+    lr: 0.01
+    momentum: 0.9
+    stat_decay: 0.99
+    weight_decay: 1.0e-05
+network_name: ResNet50
