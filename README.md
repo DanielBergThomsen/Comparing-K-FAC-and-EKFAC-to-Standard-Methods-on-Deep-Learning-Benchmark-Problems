@@ -2,7 +2,7 @@
 Repository for project in the course "Optimization for Machine Learning" (CS-439) at EPFL.
 
 ## Team member ##
-Daniel Berg Thomsen:
+Daniel Berg Thomsen: 331375
 
 Xianjie Dai: 336675
 
