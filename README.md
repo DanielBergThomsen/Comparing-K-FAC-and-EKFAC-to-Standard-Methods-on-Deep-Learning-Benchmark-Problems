@@ -3,7 +3,9 @@ Repository for project in the course "Optimization for Machine Learning" (CS-439
 
 ## Team member ##
 Daniel Berg Thomsen:
+
 Xianjie Dai: 336675
+
 Artur Stefaniuk:
 
 ## Introduction ##
@@ -22,7 +24,9 @@ To reproduce our experiemnts results, please run these two files first to:
   2. choose KFAC version and mini-batch size or network names
   3. save training logs in log file
 Finally, run plot_experiment_1.py and plot_experiment_2.py to reproduce our experiments results. 
+
 **We have already provided our trianing logs in log file, train_autoencoder.py and train_different_networks.py will clear and overwrite training logs.**
+
 Here is our suggestion:
   1. to simply reproduce the plots in our report, please run plot_experiment_1.py and plot_experiment_2.py to reproduce our experiments results first.
   2. to reproduce the whole project, please run train_autoencoder.py and train_different_networks.py first, and use plot_experiment_1.py and plot_experiment_2.py to plot.
