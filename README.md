@@ -35,9 +35,13 @@ Here is our suggestion:
   2. to reproduce the whole project, please run train_autoencoder.py and train_different_networks.py first, and use plot_experiment_1.py and plot_experiment_2.py to plot.
 
 logs: all our experiment results can be found here
+
 networks.py: different networks implementation
+
 data.py: CIFAR-10 dataloader
+
 autoencoder.py: auto-encoder implementation
+
 optimizers: two different versions of KFAC, based on alecwangcq's implementation: https://github.com/alecwangcq/KFAC-Pytorch
 
 ## Acknowledgement ##
