@@ -35,7 +35,6 @@ for config in configs:
 
     validation_df = pd.DataFrame(validation_logs)
     print(validation_df['val_acc'].max())
-    matplotlib.use('TKAgg')
 
     plt.close()
     sns.lineplot(data=validation_df, x='epoch', y='val_acc', hue='Optimizer')
