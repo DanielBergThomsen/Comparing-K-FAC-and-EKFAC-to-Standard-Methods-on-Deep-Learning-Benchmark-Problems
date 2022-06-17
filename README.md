@@ -19,12 +19,14 @@ Gradient
 The second experiment is conducted on different networks with CIFAR-10. We selected three classic model: ResNet18, ResNet50, and DesNet121.
 
 ## How to use ##
-Each experiments corrosponds to train_autoencoder.py, train_AE_SGD.py, train_AE_Adam.py, and train_different_networks.py seperately.
-To reproduce our experiemnts results, please run these three files first to:
+Each experiments corrosponds to train_autoencoder.py and train_different_networks.py seperately.
+To reproduce our experiemnts results, please run train_autoencoder.py and train_different_networks.py first to:
   1. download MNIST or CIFAR-10
   2. choose KFAC version and mini-batch size or network names
   3. save training logs in log file
-Finally, run plot_experiment_1.py, plot_experiment_1_SGD.py, and plot_experiment_2.py to reproduce our experiments results. 
+Finally, run plot_experiment_1.py, and plot_experiment_2.py to reproduce our experiments results. 
+
+The reason why we seperate training and plotting in different files is that training is computationally expensive, which usually takes hours to train on a GPU, and plotting takes seconds to finish.
 
 **We have already provided our trianing logs in log file, train_autoencoder.py and train_different_networks.py will clear and overwrite training logs.**
 
