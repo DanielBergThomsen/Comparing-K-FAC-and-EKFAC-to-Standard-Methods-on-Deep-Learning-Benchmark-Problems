@@ -1,4 +1,4 @@
-# CS-439
+# Comparing-K-FAC-and-EKFAC-to-Standard-Methods-on-Deep-Learning-Benchmark-Problem
 Repository for project in the course "Optimization for Machine Learning" (CS-439) at EPFL.
 
 ## Team member ##
@@ -22,7 +22,7 @@ The second experiment is conducted on different networks with CIFAR-10. We selec
 Each experiments corrosponds to train_autoencoder.py and train_different_networks.py seperately.
 To reproduce our experiemnts results, please run train_autoencoder.py and train_different_networks.py first to:
   1. download MNIST or CIFAR-10
-  2. choose KFAC version and mini-batch size or network names
+  2. choose mini-batch size or network names
   3. save training logs in log file
 Finally, run plot_experiment_1.py, and plot_experiment_2.py to reproduce our experiments results. 
 
