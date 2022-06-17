@@ -26,7 +26,7 @@ To reproduce our experiemnts results, please run train_autoencoder.py and train_
   3. save training logs in log file
 Finally, run plot_experiment_1.py, and plot_experiment_2.py to reproduce our experiments results. 
 
-The reason why we seperate training and plotting in different files is that training is computationally expensive, which usually takes hours to train on a GPU, and plotting takes seconds to finish.
+The reason why we seperate training and plotting in different files is that training is computationally expensive, which usually takes hours to train on a GPU, and plotting only takes seconds to finish. It would be much convenient to check the reproducibility by seperating training and plotting.
 
 **We have already provided our trianing logs in log file, train_autoencoder.py and train_different_networks.py will clear and overwrite training logs.**
 
