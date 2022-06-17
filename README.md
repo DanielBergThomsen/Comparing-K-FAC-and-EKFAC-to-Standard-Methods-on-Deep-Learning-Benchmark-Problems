@@ -22,9 +22,9 @@ The second experiment is conducted on different networks with CIFAR-10. We selec
 Each experiments corrosponds to train_autoencoder.py and train_different_networks.py seperately.
 To reproduce our experiemnts results, please run train_autoencoder.py and train_different_networks.py first to:
   1. download MNIST or CIFAR-10
-  2. choose mini-batch size or network names
-  3. save training logs in log file
-Finally, run plot_experiment_1.py, and plot_experiment_2.py to reproduce our experiments results. 
+  2. choose mini-batch size (and the network architecture to use in the second experiment)
+  2. choose KFAC version and mini-batch size or network names 
+  3. Training logs are automatically saved in the logs folder so finally, run plot_experiment_1.ipynb, and plot_experiment_2.py to reproduce our experiments results.
 
 The reason why we seperate training and plotting in different files is that training is computationally expensive, which usually takes hours to train on a GPU, and plotting only takes seconds to finish. It would be much convenient to check the reproducibility by seperating training and plotting.
 
