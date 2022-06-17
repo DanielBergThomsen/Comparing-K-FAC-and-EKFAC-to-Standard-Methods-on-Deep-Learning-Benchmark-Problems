@@ -29,7 +29,7 @@ The reason why we seperate training and plotting in different files is that trai
 **We have already provided our trianing logs in log file, train_autoencoder.py and train_different_networks.py will clear and overwrite training logs.**
 
 Here is our suggestion:
-  1. to simply reproduce the plots in our report, please run plot_experiment_1.py and plot_experiment_2.py to reproduce our experiments results first.
+  1. to simply reproduce the plots in our report, please run [plot_experiment_1.ipynb](https://github.com/DanielBergThomsen/Comparing-K-FAC-and-EKFAC-to-Standard-Methods-on-Deep-Learning-Benchmark-Problems/blob/main/plot_experiment_1.ipynb), and [plot_experiment_2.py](https://github.com/DanielBergThomsen/Comparing-K-FAC-and-EKFAC-to-Standard-Methods-on-Deep-Learning-Benchmark-Problems/blob/main/plot_experiment_2.py) to reproduce our experiments results first.
   2. to reproduce the whole project, please run train_autoencoder.py and train_different_networks.py first, and use plot_experiment_1.py and plot_experiment_2.py to plot.
 
 logs: all our experiment results can be found here
