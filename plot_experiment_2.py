@@ -6,7 +6,7 @@ import seaborn as sns
 import logging
 
 # Choose different networks
-#network_name = 'ResNet18'
+#network_name = 'ResNet50'
 #network_name = 'desnet'
 network_name = 'ResNet18'
 
