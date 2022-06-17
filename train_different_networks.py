@@ -6,16 +6,17 @@ To reproduce the plots in our report, please run this file three times with
 different kfac_version and network_name
 and go to plot_experiment_2.py to plot
 '''
-
+from os.path import isdir
 import torch
 from torchvision.datasets import CIFAR10
-from torchvision import transforms
+from torchvision.transforms import ToTensor, Normalize, Compose
 from pytorch_lightning import Trainer
 from pytorch_lightning.loggers import CSVLogger
 import logging
 from networks import ResNet
 from optimizers.kfac_eigen import KFACOptimizer as KFACOptimizer_eigen
 from optimizers.kfac_dia import KFACOptimizer as KFACOptimizer_dia
+from torch.utils.data import DataLoader
 
 # Choose different networks
 #network_name = 'ResNet18'
@@ -30,9 +31,9 @@ DATALOADER_WORKERS = 0 if torch.cuda.is_available() else 6
 
 
 # Loss function for the ResNets
-loss_fn = nn.CrossEntropyLoss()
+loss_fn = torch.nn.CrossEntropyLoss()
 def loss_function(X_pred, X, y):
-    loss_fn(X_pred, y)
+    return loss_fn(X_pred, y)
 
 
 configs = [
@@ -72,11 +73,10 @@ BATCH_SIZE = 128
 
 # Load dataset
 PATH_DATASETS = 'data/'
-download = isdir(PATH_DATASETS + 'CIFAR10')
-train_ds = CIFAR10(PATH_DATASETS, train=True, download=download, transform=transforms.ToTensor())
-train_loader = DataLoader(train_ds, batch_size=BATCH_SIZE, num_workers=DATALOADER_WORKERS)
-val_ds = CIFAR10(PATH_DATASETS, train=False, download=download, transform=transforms.ToTensor())
-val_loader = DataLoader(val_ds, batch_size=BATCH_SIZE, num_workers=DATALOADER_WORKERS)
+train_ds = CIFAR10(PATH_DATASETS, train=True, download=True, transform=Compose([ToTensor(), Normalize(mean=[0.4914, 0.4822, 0.4465],std=[0.2023, 0.1994, 0.2010])]))
+train_loader = DataLoader(train_ds, batch_size=BATCH_SIZE, num_workers=DATALOADER_WORKERS, shuffle=True,)
+val_ds = CIFAR10(PATH_DATASETS, train=False, download=True, transform=Compose([ToTensor(), Normalize(mean=[0.4914, 0.4822, 0.4465],std=[0.2023, 0.1994, 0.2010])]))
+val_loader = DataLoader(val_ds, batch_size=BATCH_SIZE, num_workers=DATALOADER_WORKERS, shuffle=False)
 
 
 for config in configs:

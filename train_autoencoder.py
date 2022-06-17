@@ -25,7 +25,7 @@ from optimizers.kfac_dia import KFACOptimizer as KFACOptimizer_dia
 import logging
 
 # Change batch size for different experiments: 2000, 4000, and 6000
-BATCH_SIZE = 6000
+BATCH_SIZE = 2000
 '''
 The number of epochs will change according to batch size to make sure that the total number of iterations equals to 3000
 Max epoch = total_number_of_iterations / number_of_iterations_per_epoch
@@ -89,12 +89,17 @@ configs = [
     }
 ]
 
+transform_test = transforms.Compose([
+    # transforms.Resize((32,32)),
+    transforms.ToTensor(),
+    transforms.Normalize(mean=[0.4914, 0.4822, 0.4465], std=[0.2023, 0.1994, 0.2010])])
+
 # Load dataset
 PATH_DATASETS = 'data/'
 download = isdir(PATH_DATASETS + 'MNIST')
-train_ds = MNIST(PATH_DATASETS, train=True, download=download, transform=Compose([ToTensor(), Lambda(torch.flatten)]))
+train_ds = MNIST(PATH_DATASETS, train=True, download=True, transform=Compose([ToTensor(), Lambda(torch.flatten)]))
 train_loader = DataLoader(train_ds, batch_size=BATCH_SIZE, num_workers=DATALOADER_WORKERS)
-val_ds = MNIST(PATH_DATASETS, train=False, download=download, transform=Compose([ToTensor(), Lambda(torch.flatten)]))
+val_ds = MNIST(PATH_DATASETS, train=False, download=True, transform=Compose([ToTensor(), Lambda(torch.flatten)]))
 val_loader = DataLoader(val_ds, batch_size=BATCH_SIZE, num_workers=DATALOADER_WORKERS)
 
 
