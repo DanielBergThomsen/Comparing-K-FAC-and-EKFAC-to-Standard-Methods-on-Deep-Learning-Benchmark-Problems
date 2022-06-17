@@ -19,7 +19,7 @@ from optimizers.kfac_dia import KFACOptimizer as KFACOptimizer_dia
 from torch.utils.data import DataLoader
 
 # Choose different networks
-#network_name = 'ResNet18'
+#network_name = 'ResNet50'
 #network_name = 'desnet'
 ARCHITECTURE = 'ResNet18'
 
