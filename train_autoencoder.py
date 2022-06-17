@@ -30,7 +30,7 @@ BATCH_SIZE = 2000
 The number of epochs will change according to batch size to make sure that the total number of iterations equals to 3000
 Max epoch = total_number_of_iterations / number_of_iterations_per_epoch
 '''
-MAX_EPOCHS = 1#int(30000/(60000/BATCH_SIZE))
+MAX_EPOCHS = int(30000/(60000/BATCH_SIZE))
 
 logging.getLogger("pytorch_lightning").setLevel(logging.WARNING)  # Silences internal Pytorch Lightning warnings
 
@@ -88,12 +88,6 @@ configs = [
                              'TInv': 100}
     }
 ]
-
-transform_test = transforms.Compose([
-    # transforms.Resize((32,32)),
-    transforms.ToTensor(),
-    transforms.Normalize(mean=[0.4914, 0.4822, 0.4465], std=[0.2023, 0.1994, 0.2010])])
-
 # Load dataset
 PATH_DATASETS = 'data/'
 download = isdir(PATH_DATASETS + 'MNIST')
