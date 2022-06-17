@@ -30,7 +30,7 @@ DATALOADER_WORKERS = 0 if torch.cuda.is_available() else 6
 
 
 # Loss function for the ResNets
-loss_fn = nn.CrossEntropyLoss()
+loss_fn = torch.nn.CrossEntropyLoss()
 def loss_function(X_pred, X, y):
     loss_fn(X_pred, y)
 
